@@ -98,7 +98,9 @@ data class detailMeal (
     val mealMeasure20: String,
 
     @SerializedName("strYoutube")
-    val mealVideo: String
+    val mealVideo: String,
+
+//    val isfavorit: Boolean = false
 )
 
 data class detailMealResponse (

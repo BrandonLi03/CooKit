@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
 }
 
 android {
@@ -50,6 +51,9 @@ android {
 }
 
 dependencies {
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1") // untuk coroutines support
+    kapt("androidx.room:room-compiler:2.6.1")
     // untuk view model
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     // untuk network calls
@@ -60,7 +64,8 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.5.0")
     // untuk navigition
     implementation("androidx.navigation:navigation-compose:2.7.7")
-
+    // untuk font
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.8.1")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

@@ -1,5 +1,7 @@
 package com.example.cookit.screen
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,12 +37,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.googlefonts.GoogleFont
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
+import com.example.cookit.R
 import com.example.cookit.model.detailMeal
 import com.example.cookit.model.meal
 import com.example.cookit.view_model.detail
@@ -49,7 +56,8 @@ import com.example.cookit.view_model.home
 @Composable
 fun detailScreen (
     navigateBack: () -> Unit,
-    detailState : detail.detailState
+    detailState : detail.detailState,
+    addToFavorite: () -> Unit
 ) {
 
     when{
@@ -62,7 +70,7 @@ fun detailScreen (
             )
         }
         else -> {
-            detailLayout(detailState.data, navigateBack)
+            detailLayout(detailState.data, navigateBack, addToFavorite)
         }
     }
 }
@@ -70,14 +78,15 @@ fun detailScreen (
 @Composable
 fun detailLayout (
     detail: List<detailMeal>,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    addToFavorite: () -> Unit
 ){
     LazyColumn (
         modifier = Modifier.fillMaxSize()
     ) {
         items(detail) {
             detail ->
-            detailItem(detail, navigateBack)
+            detailItem(detail, navigateBack, addToFavorite)
         }
     }
 }
@@ -85,8 +94,10 @@ fun detailLayout (
 @Composable
 fun detailItem (
     detail: detailMeal,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    addToFavorite: () -> Unit
 ) {
+    val context = LocalContext.current
     Box (
         modifier = Modifier.fillMaxSize()
     ) {
@@ -107,7 +118,7 @@ fun detailItem (
             Icon(Icons.Filled.ArrowBack, "Small floating action button.", tint = Color.Black)
         }
         FloatingActionButton (
-            onClick = {},
+            onClick = { addToFavorite() },
             modifier = Modifier.align(Alignment.TopEnd).padding(20.dp).height(50.dp).width(50.dp),
             containerColor = Color.White
         ) {
@@ -119,7 +130,9 @@ fun detailItem (
             Text(
                 text = detail.mealName,
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                fontSize = 26.sp
+                fontSize = 26.sp,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
             )
             Spacer(Modifier.height(25.dp))
             Text(
@@ -176,14 +189,20 @@ fun detailItem (
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
                     fontSize = 17.sp
                 )
-                FloatingActionButton(
-                    onClick = {},
-                    modifier = Modifier.fillMaxWidth().padding(20.dp)
-                ) {
-                    Text(
-                        text = "Watch Now"
-                    )
-                }
+            }
+            FloatingActionButton(
+                onClick = {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(detail.mealVideo))
+                    context.startActivity(intent)
+                },
+                modifier = Modifier.fillMaxWidth().padding(top = 30.dp),
+                containerColor = colorResource(R.color.ruby_red),
+                contentColor = colorResource(R.color.white)
+            ) {
+                Text(
+                    text = "Watch Now",
+                    fontSize = 18.sp
+                )
             }
         }
     }
