@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -40,7 +41,6 @@ fun FavoriteScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         contentPadding = PaddingValues(top = 30.dp, bottom = 16.dp)
     ) {
-        // Header
         item {
             Text(
                 text = "Favorite",
@@ -51,8 +51,6 @@ fun FavoriteScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
-
-        // Loading state
         if (isLoading) {
             item {
                 Box(
@@ -106,7 +104,7 @@ fun FavoriteItem(
             )
             Spacer(Modifier.width(15.dp))
             Column (
-                modifier = Modifier.padding(0.dp, 12.dp, 5.dp, 10.dp)
+                modifier = Modifier.padding(0.dp, 12.dp, 15.dp, 10.dp).fillMaxWidth()
             ){
                 Text(
                     text = favorite.mealName?: "",
@@ -123,9 +121,14 @@ fun FavoriteItem(
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium)
                 )
                 IconButton(
-                        onClick = { onDeleteClick(favorite) }
-                        ) {
-                    Text("🗑️") // You can replace this with proper icon
+                    onClick = { onDeleteClick(favorite) },
+                    modifier = Modifier.align(Alignment.End).width(20.dp).height(20.dp)
+                    ) {
+                    Icon(
+                        imageVector = androidx.compose.material.icons.Icons.Filled.Delete,
+                        contentDescription = "Delete",
+                        tint = Color.Red
+                    )
                 }
             }
         }

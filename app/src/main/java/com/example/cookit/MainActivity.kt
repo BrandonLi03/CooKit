@@ -12,12 +12,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -39,6 +44,7 @@ import com.example.cookit.ui.theme.CooKitTheme
 import com.example.cookit.view_model.detail
 import com.example.cookit.view_model.favorites
 import com.example.cookit.view_model.home
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -157,8 +163,14 @@ fun appNaviagtion(navController : NavHostController, modifier: Modifier){
                     },
                     detailState,
                     addToFavorite = {
-                        favoriteViewModel.insertFavorite(favorite(null, id, mealName, mealThumb))
+                        val exists = favoriteViewModel.favorites.value.any { it.mealId == id }
+                        if (exists) {
+                            Log.d("CookItError", "Already in favorite")
+                        } else {
+                            favoriteViewModel.insertFavorite(favorite(null, id, mealName, mealThumb))
+                        }
                     }
+
                 )
             }
         }
@@ -179,7 +191,7 @@ fun appNaviagtion(navController : NavHostController, modifier: Modifier){
                     homeViewModel.fetchMealByArea(area)
                 },
                 navigateToHome = {
-
+                    navController.popBackStack()
                 }
             )
         }
@@ -200,7 +212,7 @@ fun appNaviagtion(navController : NavHostController, modifier: Modifier){
                     homeViewModel.fetchMealByCategory(category)
                 },
                 navigateToHome = {
-
+                    navController.popBackStack()
                 }
             )
         }

@@ -16,9 +16,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Surface
@@ -65,8 +68,15 @@ fun MealByArea (
                     shadowElevation = 8.dp,
                     tonalElevation = 0.dp
                 ) {
+                    FloatingActionButton (
+                        onClick = { navigateToHome() },
+                        modifier = Modifier.padding(10.dp, 25.dp).height(50.dp).width(50.dp),
+                        containerColor = Color.White
+                    ) {
+                        Icon(Icons.Filled.ArrowBack, "Small floating action button.", tint = Color.Black)
+                    }
                     Column (
-                        modifier = Modifier.padding(top = 25.dp, bottom = 20.dp),
+                        modifier = Modifier.padding(top = 35.dp, bottom = 20.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
@@ -75,7 +85,7 @@ fun MealByArea (
                             fontFamily = fontFamily,
                             letterSpacing = (-0.5).sp
                         )
-                        Spacer(Modifier.height(20.dp))
+                        Spacer(Modifier.height(35.dp))
                         areaLayout(areaState.data, onAreaClick)
                     }
                 }
